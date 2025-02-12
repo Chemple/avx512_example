@@ -41,3 +41,19 @@ TEST(L2SqrSQ4Test, LargeDimensionAVX512) {
 
   EXPECT_EQ(result, expected);
 }
+
+TEST(L2SqrSQ4Test, LargeDimensionUnalignedAVX512) {
+  size_t dim = 999;
+  uint8_t x[dim], y[dim];
+
+  for (size_t i = 0; i < dim; ++i) {
+    x[i] = static_cast<uint8_t>(i);
+    y[i] = static_cast<uint8_t>(dim - i);
+  }
+
+  uint32_t expected = l2_sqr_sq4_scalar(x, y, dim);
+
+  uint32_t result = l2_sqr_sq4_avx512(x, y, dim);
+
+  EXPECT_EQ(result, expected);
+}
